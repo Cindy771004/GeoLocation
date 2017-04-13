@@ -15,12 +15,12 @@ import java.io.InputStreamReader;
 public class ReadExternalFile {
     String TAG= "ReadExternalFile";
 
-    private static final String FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/QuestionTest";
+    private static final String FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
 
     File mDirectory;
 
-    ReadExternalFile(){
-        mDirectory = new File(FILE_PATH);
+    ReadExternalFile(String folder){
+        mDirectory = new File(FILE_PATH+"/"+folder);
     }
 
     public void readFile(){

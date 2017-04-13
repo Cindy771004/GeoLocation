@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.Snackbar;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -38,10 +38,28 @@ public class MainActivity extends AppCompatActivity {
         mContext= getApplicationContext();
         mCoordinatorLayout= (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         checkPermission();
+        saveDataBySharedPref();
+        readDataBySharedPref();
+    }
 
-        ReadExternalFile mReadExternalFile= new ReadExternalFile();
+    private void saveDataBySharedPref(){
+        Log.d(TAG, "saveDataBySharedPref");
+        DataBySharedPreferences mSharedPreferences= new DataBySharedPreferences(mContext);
+        mSharedPreferences.saveData();
+    }
+
+    private void readDataBySharedPref(){
+        Log.d(TAG, "readDataBySharedPref");
+        DataBySharedPreferences mSharedPreferences= new DataBySharedPreferences(mContext);
+        mSharedPreferences.readData();
+    }
+
+    private void readFile(){
+        Log.d(TAG, "readFile");
+        //讀取SD卡中QuestionTest目錄下的檔案
+        //丟入的參數為("名稱" , 存取權限)
+        ReadExternalFile mReadExternalFile= new ReadExternalFile("QuestionTest");
         mReadExternalFile.readFile();
-
     }
 
     private String getGeoLocation(){
@@ -62,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.N)
     private int getTimeZone(){
+        Log.d(TAG, "getTimeZone");
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
         Date currentLocalTime = calendar.getTime();
         String timezone = new SimpleDateFormat("Z").format(currentLocalTime);
@@ -70,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermission(){
+        Log.d(TAG, "checkPermission");
         int locationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int readStoragePermission = ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
         //如果權限未授權，則去要求權限
