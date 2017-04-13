@@ -38,8 +38,10 @@ public class MainActivity extends AppCompatActivity {
         mContext= getApplicationContext();
         mCoordinatorLayout= (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         checkPermission();
-        getGeoLocation();
-        getTimeZone();
+
+        ReadExternalFile mReadExternalFile= new ReadExternalFile();
+        mReadExternalFile.readFile();
+
     }
 
     private String getGeoLocation(){
@@ -69,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkPermission(){
         int locationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-
-        //如果LOCATION的權限未授權，則去要求權限
-        if (locationPermission == PackageManager.PERMISSION_GRANTED) {
+        int readStoragePermission = ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
+        //如果權限未授權，則去要求權限
+        if (locationPermission == PackageManager.PERMISSION_GRANTED && readStoragePermission==PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Permission was granted ");
         } else {
             requestPermission();
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private void requestPermission() {
         Log.d(TAG, "Permission is not granted. Requesting permission");
 
-        final String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+        final String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE};
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
