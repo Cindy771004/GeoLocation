@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
@@ -16,6 +15,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.Snackbar;
+
+import com.cindy.geolocation.database.ItemDAO;
+import com.cindy.geolocation.tool.DataBySharedPreferences;
+import com.cindy.geolocation.tool.GeoLocation;
+import com.cindy.geolocation.tool.ReadExternalFile;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -38,8 +43,12 @@ public class MainActivity extends AppCompatActivity {
         mContext= getApplicationContext();
         mCoordinatorLayout= (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         checkPermission();
-        saveDataBySharedPref();
-        readDataBySharedPref();
+
+        ItemDAO dao= new ItemDAO(mContext);
+//        dao.insert("2","2");
+//        dao.delete("0");
+        dao.query();
+        dao.close();
     }
 
     private void saveDataBySharedPref(){
