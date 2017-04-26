@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.Snackbar;
+import android.widget.Button;
 
 import com.cindy.geolocation.database.ItemDAO;
 import com.cindy.geolocation.tool.DataBySharedPreferences;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout mCoordinatorLayout;//Snackbar所使用的容器
     private Context mContext;
 
+    private Button mDatabaseBth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +48,17 @@ public class MainActivity extends AppCompatActivity {
         mCoordinatorLayout= (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         checkPermission();
 
-        ItemDAO dao= new ItemDAO(mContext);
-//        dao.insert("2","2");
-//        dao.delete("0");
-        dao.query();
-        dao.close();
+        mDatabaseBth=(Button) findViewById(R.id.databaseBtn);
+        mDatabaseBth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "mDatabaseBth onClick");
+                Intent goToDatabaseActivity = new Intent();
+                goToDatabaseActivity.setClass(MainActivity.this,DatabaseActivity.class);
+                startActivity(goToDatabaseActivity);
+            }
+        });
+
     }
 
     private void saveDataBySharedPref(){

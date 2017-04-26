@@ -3,6 +3,7 @@ package com.cindy.geolocation.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.TabHost;
@@ -23,8 +24,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static SQLiteDatabase database;
 
     // 建構子
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public DBHelper(Context context) {
+        super(context, DATABASE_NAME, null, VERSION);
     }
 
     // 取得資料庫的元件
@@ -32,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "getDatabase ");
 
         if (database == null || !database.isOpen()) {
-            database = new DBHelper(context, DATABASE_NAME, null, VERSION).getWritableDatabase();
+            database = new DBHelper(context).getWritableDatabase();
         }
         return database;
     }
@@ -49,10 +50,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         Log.d(TAG, "onUpgrade");
         // 如果資料庫結構有改變了就會觸發 onUpgrade
-
+        Log.w(DBHelper.class.getName(),
+                "Upgrading database from version " + oldVersion + " to "
+                        + newVersion + ", which will destroy all old data");
         // 刪除原有的表格
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ItemDAO.TABLE_NAME);
 
