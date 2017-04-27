@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.cindy.geolocation.database.Item;
 import com.cindy.geolocation.database.ItemDAO;
@@ -21,6 +22,8 @@ public class DatabaseActivity extends ListActivity {
     private ArrayAdapter<Item> adapter;
     private Button mAddBtn;
     private Button mDeleteBtn;
+    private EditText nameEditText;
+    private EditText ageEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class DatabaseActivity extends ListActivity {
 
         mDeleteBtn = (Button) findViewById(R.id.deleteBtn);
         mDeleteBtn.setOnClickListener(deleteBthClicked);
+
+        nameEditText= (EditText) findViewById(R.id.nameEditText);
+        ageEditText=(EditText) findViewById(R.id.ageEditText);
 
         mDatabaseSource= new ItemDAO(mContext);
         mDatabaseSource.open();
@@ -49,8 +55,13 @@ public class DatabaseActivity extends ListActivity {
         public void onClick(View view) {
             Log.d(TAG, "addBthClicked");
 
+            Log.d(TAG, "name: "+ nameEditText.getText().toString());
+            Log.d(TAG, "age: "+ageEditText.getText().toString());
+            String name=  nameEditText.getText().toString();
+            int age=  Integer.parseInt(ageEditText.getText().toString());
+
             // Save the new Item to the database
-            Item item = mDatabaseSource.inserItem(3,3);
+            Item item = mDatabaseSource.inserItem(name,age);
 
             adapter.add(item);
             adapter.notifyDataSetChanged();
@@ -71,4 +82,16 @@ public class DatabaseActivity extends ListActivity {
             }
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDatabaseSource.open();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mDatabaseSource.close();
+    }
 }

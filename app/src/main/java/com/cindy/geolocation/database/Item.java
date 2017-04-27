@@ -6,8 +6,8 @@ package com.cindy.geolocation.database;
 
 public class Item {
     private long id;
-    private double lat;
-    private double lon;
+    private String name;
+    private int age;
 
     public void setId(long id){
         this.id=id;
@@ -17,26 +17,26 @@ public class Item {
         return id;
     }
 
-    public void setLat(double lat){
-        this.lat=lat;
+    public void setName(String  name){
+        this.name=name;
     }
 
-    public double getLat(){
-        return  lat;
+    public String getNmae(){
+        return  name;
     }
 
-    public void setLon(double lon){
-        this.lon=lon;
+    public void setAge(int age){
+        this.age=age;
     }
 
-    public double getLon(){
-        return lon;
+    public int getAge(){
+        return age;
     }
 
     // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
-        return "("+lat+","+lon+")";
+        return "Name: "+name+",Age: "+age;
     }
 
 }
